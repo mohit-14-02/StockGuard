@@ -12,22 +12,34 @@ interface Props {
 
 export default function RestockAlerts({ products }: Props) {
   return (
-    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/60 rounded-2xl p-4 mb-6 animate-fade-in-up">
       <div className="flex items-center gap-2 mb-3">
-        <AlertTriangle className="w-5 h-5 text-amber-600" />
-        <h3 className="font-semibold text-amber-800">Restock Recommended</h3>
+        <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
+          <AlertTriangle className="w-4 h-4 text-white" />
+        </div>
+        <div>
+          <h3 className="font-bold text-amber-800 text-sm">Restock Alert / रीस्टॉक अलर्ट</h3>
+          <p className="text-[10px] text-amber-600/70">Stock running low on these items</p>
+        </div>
+        <span className="ml-auto text-xs font-bold text-amber-700 bg-amber-200/50 px-2 py-0.5 rounded-full">{products.length}</span>
       </div>
       <div className="space-y-2">
         {products.map((p, i) => (
-          <div key={i} className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-amber-100">
+          <div key={i} className="flex items-center justify-between bg-white rounded-xl px-3 py-2.5 border border-amber-100 hover:shadow-sm transition-all">
             <div>
-              <span className="font-medium text-gray-900 text-sm">{p.name}</span>
-              <span className="text-xs text-gray-500 ml-2">
-                Stock: {p.stock} · Restock Limit: {p.limit}
-              </span>
+              <span className="font-semibold text-gray-900 text-sm">{p.name}</span>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-[10px] text-gray-500">
+                  Stock: <span className="font-bold text-amber-700">{p.stock}</span>
+                </span>
+                <span className="text-[10px] text-gray-400">·</span>
+                <span className="text-[10px] text-gray-500">
+                  Min: <span className="font-bold">{p.limit}</span>
+                </span>
+              </div>
             </div>
-            <span className="text-xs font-semibold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">
-              Low Stock
+            <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-200/50">
+              ⚠️ Low Stock
             </span>
           </div>
         ))}

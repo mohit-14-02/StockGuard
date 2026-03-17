@@ -6,13 +6,17 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar hidden on very small screens, 64 widths wide */}
+    <div className="flex min-h-screen bg-[#FAFAF7]">
+      {/* Sidebar — hidden on small screens, handled by hamburger */}
       <div className="hidden md:block w-64 shrink-0">
         <Sidebar />
       </div>
-      
-      {/* Main content expands to fill remaining space */}
+      {/* Mobile sidebar (rendered inside Sidebar component) */}
+      <div className="md:hidden">
+        <Sidebar />
+      </div>
+
+      {/* Main content */}
       <div className="flex-1 w-full min-w-0">
         {children}
       </div>

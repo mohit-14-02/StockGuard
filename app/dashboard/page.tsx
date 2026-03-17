@@ -7,7 +7,6 @@ import InvoiceUpload from '@/components/entry/InvoiceUpload'
 import ActionButtons from '@/components/dashboard/ActionButtons'
 import DashboardWidgets from '@/components/dashboard/DashboardWidgets'
 import RestockAlerts from '@/components/dashboard/RestockAlerts'
-import LogoutButton from '@/components/dashboard/LogoutButton'
 import ExpiryChecker from '@/components/dashboard/ExpiryChecker'
 import SendSummaryButton from '@/components/dashboard/SendSummaryButton'
 
@@ -23,7 +22,6 @@ export default async function DashboardPage() {
 
   const productIds = (products || []).map((p: any) => p.id)
 
-  // Fetch batches and distributors (always works)
   const batchesPromise = productIds.length > 0
     ? supabase
         .from('Batch')
@@ -37,7 +35,6 @@ export default async function DashboardPage() {
     .select('*, returnLogs:ReturnLog(*)')
     .eq('shopId', SHOP_ID)
 
-  // Fetch sales (graceful — table might not exist yet)
   const salesPromise = supabase
     .from('Sales')
     .select('*')
@@ -51,7 +48,6 @@ export default async function DashboardPage() {
 
   const batches = batchesRes.data || []
   const distributors = distributorsRes.data || []
-  // If Sales table doesn't exist, salesRes.error will be set but salesRes.data will be null
   const sales = salesRes.data || []
 
   const batchIds = batches.map((b: any) => b.id)
@@ -67,9 +63,6 @@ export default async function DashboardPage() {
   const acceptedIds = new Set(returnLogs.filter((r: any) => r.outcome === 'accepted').map((r: any) => r.batchId) as string[])
   const today = new Date()
 
-  // ──────────────────────────────────────────
-  // Inventory & Sales Metrics
-  // ──────────────────────────────────────────
   let itemsSoldToday = 0
   let lowStockCount = 0
   let restockAlerts = 0
@@ -82,7 +75,6 @@ export default async function DashboardPage() {
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
   sevenDaysAgo.setHours(0, 0, 0, 0)
 
-  // Stock per product
   const stockMap: Record<string, number> = {}
   const productNameMap: Record<string, string> = {}
   batches.forEach((b: any) => {
@@ -91,7 +83,6 @@ export default async function DashboardPage() {
     if (b.product?.name) productNameMap[b.productId] = b.product.name
   })
 
-  // Sales aggregation (7-day window for restock, today's for widget)
   const salesMap7d: Record<string, number> = {}
   sales.forEach((s: any) => {
     const saleDate = new Date(s.createdAt)
@@ -103,7 +94,6 @@ export default async function DashboardPage() {
     }
   })
 
-  // Restock alerts: static threshold (e.g. stock <= 10)
   const restockProducts: { name: string; stock: number; limit: number }[] = []
   const RESTOCK_LIMIT_THRESHOLD = 10
 
@@ -111,7 +101,6 @@ export default async function DashboardPage() {
     const stock = stockMap[pid] || 0
     if (stock > 0 && stock <= 5) lowStockCount++
 
-    // Setup custom limit here (<= 10)
     if (stock > 0 && stock <= RESTOCK_LIMIT_THRESHOLD) {
       restockAlerts++
       restockProducts.push({
@@ -122,9 +111,6 @@ export default async function DashboardPage() {
     }
   })
 
-  // ──────────────────────────────────────────
-  // Existing Loss Data
-  // ──────────────────────────────────────────
   const lossData = {
     atRisk: Math.round(calcAtRisk(batches)),
     recovered: Math.round(calcRecovered(returnLogs)),
@@ -148,44 +134,75 @@ export default async function DashboardPage() {
     hasEscalation: d.returnLogs.filter((r: any) => r.outcome === 'rejected').length >= 2
   }))
 
+  // Get greeting based on time
+  const hour = new Date().getHours()
+  let greeting = 'Good Morning'
+  let greetingHi = 'सुप्रभात'
+  if (hour >= 12 && hour < 17) { greeting = 'Good Afternoon'; greetingHi = 'नमस्कार' }
+  else if (hour >= 17) { greeting = 'Good Evening'; greetingHi = 'शुभ संध्या' }
+
   return (
-    <main className="p-6 md:p-8 w-full max-w-7xl mx-auto flex-1">
+    <main className="p-4 md:p-6 lg:p-8 w-full max-w-6xl mx-auto flex-1">
       <ExpiryChecker />
-      <header className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">StockGuard</h1>
-          <p className="text-gray-500 text-sm">Inventory Management Dashboard</p>
+      
+      {/* Header with greeting */}
+      <header className="mb-6 animate-fade-in-up">
+        <div className="flex items-center justify-between">
+          <div className="ml-12 md:ml-0">
+            <p className="text-sm text-gray-400 font-medium">{greeting} / {greetingHi} 👋</p>
+            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
+              StockGuard Dashboard
+            </h1>
+            <p className="text-xs text-gray-400 mt-0.5">Last updated: {new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
+          </div>
         </div>
-        <LogoutButton />
       </header>
 
-      <DashboardWidgets
-        itemsSoldToday={itemsSoldToday}
-        lowStockCount={lowStockCount}
-        restockAlerts={restockAlerts}
-        currentInventoryCount={currentInventoryCount}
-      />
+      {/* Loss Calculator - MUKHYA / मुख्य */}
+      <section className="mb-6">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">💰 Loss Calculator / नुकसान कैलकुलेटर</p>
+        <LossCalculator data={lossData} />
+      </section>
 
-      <ActionButtons shopId={SHOP_ID} />
+      {/* Quick Actions */}
+      <section className="mb-6">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">⚡ Quick Actions / त्वरित क्रियाएं</p>
+        <ActionButtons shopId={SHOP_ID} />
+      </section>
 
+      {/* WhatsApp Summary */}
       <div className="mb-6">
         <SendSummaryButton />
       </div>
 
+      {/* Dashboard Stats */}
+      <section className="mb-6">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">📊 Overview / अवलोकन</p>
+        <DashboardWidgets
+          itemsSoldToday={itemsSoldToday}
+          lowStockCount={lowStockCount}
+          restockAlerts={restockAlerts}
+          currentInventoryCount={currentInventoryCount}
+        />
+      </section>
+
+      {/* Restock Alerts */}
       {restockProducts.length > 0 && (
         <RestockAlerts products={restockProducts} />
       )}
 
-      <LossCalculator data={lossData} />
-
-      <section className="my-6">
+      {/* Invoice Upload */}
+      <section className="mb-6">
         <InvoiceUpload shopId={SHOP_ID} />
       </section>
 
-      <BatchTable batches={batchesWithDays} shopId={SHOP_ID} />
+      {/* Batch Table */}
+      <section className="mb-6">
+        <BatchTable batches={batchesWithDays} shopId={SHOP_ID} />
+      </section>
 
-      <section className="mt-8">
-        <h2 className="text-lg font-medium mb-3">Distributors</h2>
+      {/* Distributors */}
+      <section className="mb-6">
         <DistributorScore distributors={distData} />
       </section>
     </main>

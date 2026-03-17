@@ -32,7 +32,6 @@ export default function SendSummaryButton() {
       setMessage(err.message || 'Network error')
     }
 
-    // Reset after 4 seconds
     setTimeout(() => {
       setStatus('idle')
       setMessage('')
@@ -44,13 +43,13 @@ export default function SendSummaryButton() {
       onClick={handleSend}
       disabled={status === 'sending'}
       className={`
-        flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm
-        transition-all shadow-sm active:scale-[0.97] w-full
+        flex items-center justify-center gap-2 px-4 py-3 rounded-2xl font-bold text-sm
+        transition-all active:scale-[0.97] w-full
         ${status === 'success'
-          ? 'bg-gradient-to-br from-green-50 to-emerald-50 text-green-700 border border-green-200'
+          ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-emerald-200/50'
           : status === 'error'
-            ? 'bg-gradient-to-br from-red-50 to-rose-50 text-red-700 border border-red-200'
-            : 'bg-gradient-to-br from-purple-50 to-violet-50 hover:from-purple-100 hover:to-violet-100 text-purple-700 border border-purple-200'
+            ? 'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-200/50'
+            : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg shadow-green-200/50 hover:shadow-green-300/50'
         }
         disabled:opacity-60 disabled:cursor-not-allowed
       `}
@@ -60,8 +59,8 @@ export default function SendSummaryButton() {
       {status === 'error' && <AlertCircle className="w-5 h-5" />}
       {status === 'idle' && <MessageCircle className="w-5 h-5" />}
 
-      {status === 'idle' && 'Send WhatsApp Summary'}
-      {status === 'sending' && 'Sending...'}
+      {status === 'idle' && '📲 Send WhatsApp Summary / समरी भेजें'}
+      {status === 'sending' && 'Sending... / भेज रहे हैं...'}
       {status === 'success' && message}
       {status === 'error' && message}
     </button>

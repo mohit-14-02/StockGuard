@@ -18,14 +18,6 @@ export default function LogoutButton() {
     }
   }
 
-  return (
-    <button
-      onClick={handleLogout}
-      disabled={loading}
-      className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-600 transition-colors disabled:opacity-50"
-    >
-      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogOut className="w-4 h-4" />}
-      Sign out
-    </button>
-  )
+  // This component is kept for backward compatibility but logout is now in sidebar
+  return null
 }
