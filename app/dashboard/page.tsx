@@ -9,6 +9,7 @@ import DashboardWidgets from '@/components/dashboard/DashboardWidgets'
 import RestockAlerts from '@/components/dashboard/RestockAlerts'
 import LogoutButton from '@/components/dashboard/LogoutButton'
 import ExpiryChecker from '@/components/dashboard/ExpiryChecker'
+import SendSummaryButton from '@/components/dashboard/SendSummaryButton'
 
 const SHOP_ID = process.env.NEXT_PUBLIC_SHOP_ID || ''
 
@@ -166,6 +167,10 @@ export default async function DashboardPage() {
       />
 
       <ActionButtons shopId={SHOP_ID} />
+
+      <div className="mb-6">
+        <SendSummaryButton />
+      </div>
 
       {restockProducts.length > 0 && (
         <RestockAlerts products={restockProducts} />
