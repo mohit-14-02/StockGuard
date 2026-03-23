@@ -217,6 +217,62 @@ export type TranslationKeys = {
   restockListening: string
   restockStopListening: string
   minStock: string
+
+  // Profile Form
+  personalIdentity: string
+  personalIdentitySub: string
+  fullNameLabel: string
+  usernameLabel: string
+  verifiedEmailLabel: string
+  whatsappNumberProfileLabel: string
+  professionalBio: string
+  businessConfiguration: string
+  businessConfigSub: string
+  shopNameProfileLabel: string
+  tradeCategoryLabel: string
+  selectCategory: string
+  operatingAddress: string
+  saveConfiguration: string
+  updatingSystem: string
+  mandatoryFields: string
+
+  // Invoice Upload
+  uploadInvoiceBtn: string
+  uploadInvoiceSubtext: string
+  readingInvoice: string
+  readingInvoiceSub: string
+  foundItems: string
+  deselectToSkip: string
+  saveAllSelected: string
+  savedRefreshing: string
+
+  // Distributor Score
+  distributorScoreTitle: string
+  returnReliability: string
+  returnsAccepted: string
+  noDistributorsYet: string
+  noDistributorsYetSub: string
+  reliable: string
+  issue: string
+  caution: string
+  escalate: string
+
+  // Profile Page
+  aboutMe: string
+  details: string
+  editExperience: string
+  profileManageSubtitle: string
+
+  // Profile Edit Page
+  settingsEditLabel: string
+  updateProfile: string
+  profileEditSubtitle: string
+
+  // Settings Page
+  languageLabel: string
+  choosePreferredLanguage: string
+  changeLanguageBtn: string
+  includeCountryCodeSettings: string
 }
 
 export const translations: Record<LanguageCode, TranslationKeys> = {
@@ -382,6 +438,62 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     restockListening: 'Listening...',
     restockStopListening: 'Stop Listening',
     minStock: 'Min',
+
+    // Profile Form
+    personalIdentity: 'Personal Identity',
+    personalIdentitySub: 'Personal Identification',
+    fullNameLabel: 'Full Name',
+    usernameLabel: 'Username',
+    verifiedEmailLabel: 'Verified Email',
+    whatsappNumberProfileLabel: 'WhatsApp Number',
+    professionalBio: 'Professional Bio',
+    businessConfiguration: 'Business Configuration',
+    businessConfigSub: 'Business Settings',
+    shopNameProfileLabel: 'Shop Name',
+    tradeCategoryLabel: 'Trade Category',
+    selectCategory: 'Select Category',
+    operatingAddress: 'Operating Address',
+    saveConfiguration: 'SAVE CONFIGURATION',
+    updatingSystem: 'UPDATING SYSTEM...',
+    mandatoryFields: 'Mandatory fields are marked with *',
+
+    // Invoice Upload
+    uploadInvoiceBtn: 'Upload Invoice',
+    uploadInvoiceSubtext: 'Take photo of bill to auto-add stock',
+    readingInvoice: 'Reading invoice...',
+    readingInvoiceSub: 'Processing your invoice...',
+    foundItems: 'Found {count} items',
+    deselectToSkip: 'Deselect any to skip',
+    saveAllSelected: 'Save All Selected',
+    savedRefreshing: 'Saved! Refreshing...',
+
+    // Distributor Score
+    distributorScoreTitle: 'Distributors',
+    returnReliability: 'Return reliability score',
+    returnsAccepted: 'returns accepted',
+    noDistributorsYet: 'No distributors yet',
+    noDistributorsYetSub: 'Add distributors to track return reliability',
+    reliable: 'Reliable',
+    issue: 'Issue',
+    caution: 'Caution',
+    escalate: 'Escalate',
+
+    // Profile Page
+    aboutMe: 'About Me',
+    details: 'Details',
+    editExperience: 'Edit Experience',
+    profileManageSubtitle: 'Manage your professional identity and shop configurations',
+
+    // Profile Edit Page
+    settingsEditLabel: 'Settings',
+    updateProfile: 'Update Profile',
+    profileEditSubtitle: 'Refining your identity for the marketplace',
+
+    // Settings Page
+    languageLabel: 'Language',
+    choosePreferredLanguage: 'Choose your preferred app language',
+    changeLanguageBtn: 'Change Language',
+    includeCountryCodeSettings: 'Always include country code (e.g. +91). Messages will be sent here.',
   },
 
   te: {
@@ -540,6 +652,51 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     restockListening: 'వింటోంది...',
     restockStopListening: 'వినడం ఆపండి',
     minStock: 'కనిష్ట',
+    // Profile Form
+    personalIdentity: 'వ్యక్తిగత గుర్తింపు',
+    personalIdentitySub: 'వ్యక్తిగత గుర్తింపు',
+    fullNameLabel: 'పూర్తి పేరు',
+    usernameLabel: 'యూజర్‌నేమ్',
+    verifiedEmailLabel: 'ధృవీకరించిన ఇమెయిల్',
+    whatsappNumberProfileLabel: 'WhatsApp నంబర్',
+    professionalBio: 'వృత్తిపరమైన బయో',
+    businessConfiguration: 'వ్యాపార కాన్ఫిగరేషన్',
+    businessConfigSub: 'వ్యాపార సెట్టింగ్‌లు',
+    shopNameProfileLabel: 'షాపు పేరు',
+    tradeCategoryLabel: 'వ్యాపార వర్గం',
+    selectCategory: 'వర్గం ఎంచుకోండి',
+    operatingAddress: 'కార్యాచరణ చిరునామా',
+    saveConfiguration: 'కాన్ఫిగరేషన్ సేవ్ చేయండి',
+    updatingSystem: 'అప్‌డేట్ అవుతోంది...',
+    mandatoryFields: 'తప్పనిసరి ఫీల్డ్‌లు * తో గుర్తించబడ్డాయి',
+    uploadInvoiceBtn: 'ఇన్వాయిస్ అప్‌లోడ్',
+    uploadInvoiceSubtext: 'స్టాక్ ఆటో-యాడ్ చేయడానికి బిల్ ఫోటో తీయండి',
+    readingInvoice: 'ఇన్వాయిస్ చదువుతోంది...',
+    readingInvoiceSub: 'మీ ఇన్వాయిస్ ప్రాసెస్ అవుతోంది...',
+    foundItems: '{count} ఐటమ్‌లు కనుగొనబడ్డాయి',
+    deselectToSkip: 'స్కిప్ చేయడానికి అన్‌చెక్ చేయండి',
+    saveAllSelected: 'ఎంపిక చేసినవన్నీ సేవ్ చేయండి',
+    savedRefreshing: 'సేవ్ అయింది! రిఫ్రెష్ అవుతోంది...',
+    distributorScoreTitle: 'పంపిణీదారులు',
+    returnReliability: 'రిటర్న్ నమ్మకత్వం స్కోర్',
+    returnsAccepted: 'రిటర్న్‌లు ఆమోదించబడ్డాయి',
+    noDistributorsYet: 'ఇంకా పంపిణీదారులు లేరు',
+    noDistributorsYetSub: 'రిటర్న్ నమ్మకత్వం ట్రాక్ చేయడానికి పంపిణీదారులను జోడించండి',
+    reliable: 'నమ్మదగిన',
+    issue: 'సమస్య',
+    caution: 'జాగ్రత్త',
+    escalate: 'ఎస్కలేట్',
+    aboutMe: 'నా గురించి',
+    details: 'వివరాలు',
+    editExperience: 'అనుభవం సవరించండి',
+    profileManageSubtitle: 'మీ వృత్తిపరమైన గుర్తింపు మరియు షాపు కాన్ఫిగరేషన్‌లను నిర్వహించండి',
+    settingsEditLabel: 'సెట్టింగ్‌లు',
+    updateProfile: 'ప్రొఫైల్ అప్‌డేట్',
+    profileEditSubtitle: 'మార్కెట్‌ప్లేస్ కోసం మీ గుర్తింపును మెరుగుపరచండి',
+    languageLabel: 'భాష',
+    choosePreferredLanguage: 'మీ ఇష్టమైన యాప్ భాషను ఎంచుకోండి',
+    changeLanguageBtn: 'భాషను మార్చండి',
+    includeCountryCodeSettings: 'ఎల్లప్పుడూ దేశ కోడ్ చేర్చండి (ఉదా. +91). సందేశాలు ఇక్కడ పంపబడతాయి.',
   },
 
   hi: {
@@ -704,6 +861,51 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     restockListening: 'सुन रहा है...',
     restockStopListening: 'सुनना बंद करें',
     minStock: 'न्यूनतम',
+    // Profile Form
+    personalIdentity: 'व्यक्तिगत पहचान',
+    personalIdentitySub: 'व्यक्तिगत पहचान',
+    fullNameLabel: 'पूरा नाम',
+    usernameLabel: 'यूज़रनेम',
+    verifiedEmailLabel: 'सत्यापित ईमेल',
+    whatsappNumberProfileLabel: 'व्हाट्सएप नंबर',
+    professionalBio: 'अपना परिचय',
+    businessConfiguration: 'व्यापार विन्यास',
+    businessConfigSub: 'व्यापार सेटिंग्स',
+    shopNameProfileLabel: 'दुकान का नाम',
+    tradeCategoryLabel: 'व्यापार श्रेणी',
+    selectCategory: 'श्रेणी चुनें',
+    operatingAddress: 'दुकान का पता',
+    saveConfiguration: 'सुरक्षित करें',
+    updatingSystem: 'अपडेट हो रहा है...',
+    mandatoryFields: 'अनिवार्य फ़ील्ड * से चिह्नित हैं',
+    uploadInvoiceBtn: 'इनवॉइस अपलोड करें',
+    uploadInvoiceSubtext: 'स्टॉक ऑटो-ऐड करने के लिए बिल की फोटो लें',
+    readingInvoice: 'इनवॉइस पढ़ रहे हैं...',
+    readingInvoiceSub: 'आपकी इनवॉइस प्रोसेस हो रही है...',
+    foundItems: '{count} आइटम मिले',
+    deselectToSkip: 'हटाने के लिए अनचेक करें',
+    saveAllSelected: 'सब सेव करें',
+    savedRefreshing: 'सेव हो गया! रिफ्रेश हो रहा है...',
+    distributorScoreTitle: 'वितरक',
+    returnReliability: 'वापसी विश्वसनीयता स्कोर',
+    returnsAccepted: 'रिटर्न स्वीकृत',
+    noDistributorsYet: 'अभी तक कोई वितरक नहीं',
+    noDistributorsYetSub: 'रिटर्न विश्वसनीयता ट्रैक करने के लिए वितरक जोड़ें',
+    reliable: 'विश्वसनीय',
+    issue: 'समस्या',
+    caution: 'सावधानी',
+    escalate: 'एस्केलेट',
+    aboutMe: 'मेरे बारे में',
+    details: 'विवरण',
+    editExperience: 'अनुभव संपादित करें',
+    profileManageSubtitle: 'अपनी पेशेवर पहचान और दुकान सेटिंग्स प्रबंधित करें',
+    settingsEditLabel: 'सेटिंग्स',
+    updateProfile: 'प्रोफ़ाइल अपडेट',
+    profileEditSubtitle: 'बाज़ार के लिए अपनी पहचान को बेहतर बनाएं',
+    languageLabel: 'भाषा',
+    choosePreferredLanguage: 'ऐप के लिए अपनी पसंदीदा भाषा चुनें',
+    changeLanguageBtn: 'भाषा बदलें',
+    includeCountryCodeSettings: 'हमेशा देश कोड शामिल करें (जैसे +91)। संदेश यहां भेजे जाएंगे।',
   },
 
   mr: {
@@ -862,6 +1064,50 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     restockListening: 'ऐकत आहे...',
     restockStopListening: 'ऐकणे थांबवा',
     minStock: 'किमान',
+    personalIdentity: 'वैयक्तिक ओळख',
+    personalIdentitySub: 'वैयक्तिक ओळख',
+    fullNameLabel: 'पूर्ण नाव',
+    usernameLabel: 'युजरनेम',
+    verifiedEmailLabel: 'सत्यापित ईमेल',
+    whatsappNumberProfileLabel: 'WhatsApp नंबर',
+    professionalBio: 'व्यावसायिक माहिती',
+    businessConfiguration: 'व्यवसाय कॉन्फिगरेशन',
+    businessConfigSub: 'व्यवसाय सेटिंग्ज',
+    shopNameProfileLabel: 'दुकानाचे नाव',
+    tradeCategoryLabel: 'व्यापार श्रेणी',
+    selectCategory: 'श्रेणी निवडा',
+    operatingAddress: 'दुकानाचा पत्ता',
+    saveConfiguration: 'सेव्ह करा',
+    updatingSystem: 'अपडेट होत आहे...',
+    mandatoryFields: 'अनिवार्य फील्ड * ने चिन्हांकित आहेत',
+    uploadInvoiceBtn: 'इनव्हॉइस अपलोड',
+    uploadInvoiceSubtext: 'स्टॉक ऑटो-अॅड करण्यासाठी बिलाचा फोटो घ्या',
+    readingInvoice: 'इनव्हॉइस वाचत आहे...',
+    readingInvoiceSub: 'तुमची इनव्हॉइस प्रक्रिया होत आहे...',
+    foundItems: '{count} आयटम सापडले',
+    deselectToSkip: 'वगळण्यासाठी अनचेक करा',
+    saveAllSelected: 'निवडलेले सर्व सेव्ह करा',
+    savedRefreshing: 'सेव्ह झाले! रिफ्रेश होत आहे...',
+    distributorScoreTitle: 'वितरक',
+    returnReliability: 'परतावा विश्वसनीयता स्कोर',
+    returnsAccepted: 'परतावा स्वीकृत',
+    noDistributorsYet: 'अद्याप कोणतेही वितरक नाहीत',
+    noDistributorsYetSub: 'परतावा विश्वसनीयता ट्रॅक करण्यासाठी वितरक जोडा',
+    reliable: 'विश्वसनीय',
+    issue: 'समस्या',
+    caution: 'सावधानता',
+    escalate: 'एस्केलेट',
+    aboutMe: 'माझ्याबद्दल',
+    details: 'तपशील',
+    editExperience: 'अनुभव संपादित करा',
+    profileManageSubtitle: 'तुमची व्यावसायिक ओळख आणि दुकान सेटिंग्ज व्यवस्थापित करा',
+    settingsEditLabel: 'सेटिंग्ज',
+    updateProfile: 'प्रोफाइल अपडेट',
+    profileEditSubtitle: 'मार्केटप्लेससाठी तुमची ओळख सुधारा',
+    languageLabel: 'भाषा',
+    choosePreferredLanguage: 'तुमची पसंतीची अॅप भाषा निवडा',
+    changeLanguageBtn: 'भाषा बदला',
+    includeCountryCodeSettings: 'नेहमी देश कोड समाविष्ट करा (उदा. +91). संदेश येथे पाठवले जातील.',
   },
 
   ta: {
@@ -1020,6 +1266,50 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     restockListening: 'கேட்கிறது...',
     restockStopListening: 'கேட்பதை நிறுத்து',
     minStock: 'குறைந்தபட்சம்',
+    personalIdentity: 'தனிப்பட்ட அடையாளம்',
+    personalIdentitySub: 'தனிப்பட்ட அடையாளம்',
+    fullNameLabel: 'முழு பெயர்',
+    usernameLabel: 'பயனர்பெயர்',
+    verifiedEmailLabel: 'சரிபார்க்கப்பட்ட மின்னஞ்சல்',
+    whatsappNumberProfileLabel: 'WhatsApp எண்',
+    professionalBio: 'தொழில்முறை குறிப்பு',
+    businessConfiguration: 'வணிக அமைப்பு',
+    businessConfigSub: 'வணிக அமைப்புகள்',
+    shopNameProfileLabel: 'கடையின் பெயர்',
+    tradeCategoryLabel: 'வர்த்தக வகை',
+    selectCategory: 'வகையைத் தேர்ந்தெடுக்கவும்',
+    operatingAddress: 'இயக்க முகவரி',
+    saveConfiguration: 'சேமிக்கவும்',
+    updatingSystem: 'புதுப்பிக்கிறது...',
+    mandatoryFields: 'கட்டாய புலங்கள் * உடன் குறிக்கப்பட்டுள்ளன',
+    uploadInvoiceBtn: 'விலைப்பட்டியல் பதிவேற்றம்',
+    uploadInvoiceSubtext: 'சரக்கை தானாக சேர்க்க பில் புகைப்படம் எடுக்கவும்',
+    readingInvoice: 'விலைப்பட்டியல் படிக்கிறது...',
+    readingInvoiceSub: 'உங்கள் விலைப்பட்டியல் செயலாக்கப்படுகிறது...',
+    foundItems: '{count} பொருட்கள் கண்டறியப்பட்டன',
+    deselectToSkip: 'தவிர்க்க தேர்வு நீக்கவும்',
+    saveAllSelected: 'தேர்ந்தெடுத்தவை அனைத்தையும் சேமி',
+    savedRefreshing: 'சேமிக்கப்பட்டது! புதுப்பிக்கிறது...',
+    distributorScoreTitle: 'விநியோகஸ்தர்கள்',
+    returnReliability: 'திரும்ப நம்பகத்தன்மை மதிப்பெண்',
+    returnsAccepted: 'திரும்ப ஏற்கப்பட்டது',
+    noDistributorsYet: 'இன்னும் விநியோகஸ்தர்கள் இல்லை',
+    noDistributorsYetSub: 'திரும்ப நம்பகத்தன்மையை கண்காணிக்க விநியோகஸ்தர்களைச் சேர்க்கவும்',
+    reliable: 'நம்பகமான',
+    issue: 'சிக்கல்',
+    caution: 'எச்சரிக்கை',
+    escalate: 'தீவிரப்படுத்து',
+    aboutMe: 'என்னைப் பற்றி',
+    details: 'விவரங்கள்',
+    editExperience: 'அனுபவத்தைத் திருத்தவும்',
+    profileManageSubtitle: 'உங்கள் தொழில்முறை அடையாளம் மற்றும் கடை அமைப்புகளை நிர்வகிக்கவும்',
+    settingsEditLabel: 'அமைப்புகள்',
+    updateProfile: 'சுயவிவரம் புதுப்பிப்பு',
+    profileEditSubtitle: 'சந்தைக்கான உங்கள் அடையாளத்தை மேம்படுத்தவும்',
+    languageLabel: 'மொழி',
+    choosePreferredLanguage: 'உங்களுக்கு விருப்பமான பயன்பாட்டு மொழியைத் தேர்ந்தெடுக்கவும்',
+    changeLanguageBtn: 'மொழியை மாற்றவும்',
+    includeCountryCodeSettings: 'எப்போதும் நாட்டு குறியீட்டை சேர்க்கவும் (எ.கா. +91). செய்திகள் இங்கே அனுப்பப்படும்.',
   },
 
   kn: {
@@ -1178,5 +1468,49 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     restockListening: 'ಕೇಳುತ್ತಿದೆ...',
     restockStopListening: 'ಕೇಳುವುದನ್ನು ನಿಲ್ಲಿಸಿ',
     minStock: 'ಕನಿಷ್ಠ',
+    personalIdentity: 'ವೈಯಕ್ತಿಕ ಗುರುತು',
+    personalIdentitySub: 'ವೈಯಕ್ತಿಕ ಗುರುತು',
+    fullNameLabel: 'ಪೂರ್ಣ ಹೆಸರು',
+    usernameLabel: 'ಬಳಕೆದಾರ ಹೆಸರು',
+    verifiedEmailLabel: 'ಪರಿಶೀಲಿಸಿದ ಇಮೇಲ್',
+    whatsappNumberProfileLabel: 'WhatsApp ಸಂಖ್ಯೆ',
+    professionalBio: 'ವೃತ್ತಿಪರ ಪರಿಚಯ',
+    businessConfiguration: 'ವ್ಯಾಪಾರ ಕಾನ್ಫಿಗರೇಶನ್',
+    businessConfigSub: 'ವ್ಯಾಪಾರ ಸೆಟ್ಟಿಂಗ್‌ಗಳು',
+    shopNameProfileLabel: 'ಅಂಗಡಿ ಹೆಸರು',
+    tradeCategoryLabel: 'ವ್ಯಾಪಾರ ವರ್ಗ',
+    selectCategory: 'ವರ್ಗ ಆಯ್ಕೆ ಮಾಡಿ',
+    operatingAddress: 'ಕಾರ್ಯಾಚರಣ ವಿಳಾಸ',
+    saveConfiguration: 'ಉಳಿಸಿ',
+    updatingSystem: 'ನವೀಕರಿಸುತ್ತಿದೆ...',
+    mandatoryFields: 'ಕಡ್ಡಾಯ ಕ್ಷೇತ್ರಗಳನ್ನು * ನೊಂದಿಗೆ ಗುರುತಿಸಲಾಗಿದೆ',
+    uploadInvoiceBtn: 'ಸರಕುಪಟ್ಟಿ ಅಪ್‌ಲೋಡ್',
+    uploadInvoiceSubtext: 'ಸ್ಟಾಕ್ ಆಟೋ-ಆಡ್ ಮಾಡಲು ಬಿಲ್ ಫೋಟೋ ತೆಗೆಯಿರಿ',
+    readingInvoice: 'ಸರಕುಪಟ್ಟಿ ಓದುತ್ತಿದೆ...',
+    readingInvoiceSub: 'ನಿಮ್ಮ ಸರಕುಪಟ್ಟಿ ಪ್ರಕ್ರಿಯೆಗೊಳ್ಳುತ್ತಿದೆ...',
+    foundItems: '{count} ಐಟಂಗಳು ಕಂಡುಬಂದವು',
+    deselectToSkip: 'ಬಿಡಲು ಅನ್‌ಚೆಕ್ ಮಾಡಿ',
+    saveAllSelected: 'ಆಯ್ಕೆ ಮಾಡಿದ ಎಲ್ಲವನ್ನೂ ಉಳಿಸಿ',
+    savedRefreshing: 'ಉಳಿಸಲಾಗಿದೆ! ರಿಫ್ರೆಶ್ ಆಗುತ್ತಿದೆ...',
+    distributorScoreTitle: 'ವಿತರಕರು',
+    returnReliability: 'ರಿಟರ್ನ್ ವಿಶ್ವಾಸಾರ್ಹತೆ ಸ್ಕೋರ್',
+    returnsAccepted: 'ರಿಟರ್ನ್ ಸ್ವೀಕರಿಸಲಾಯಿತು',
+    noDistributorsYet: 'ಇನ್ನೂ ವಿತರಕರು ಇಲ್ಲ',
+    noDistributorsYetSub: 'ರಿಟರ್ನ್ ವಿಶ್ವಾಸಾರ್ಹತೆ ಟ್ರ್ಯಾಕ್ ಮಾಡಲು ವಿತರಕರನ್ನು ಸೇರಿಸಿ',
+    reliable: 'ವಿಶ್ವಾಸಾರ್ಹ',
+    issue: 'ಸಮಸ್ಯೆ',
+    caution: 'ಎಚ್ಚರಿಕೆ',
+    escalate: 'ಏರಿಸಿ',
+    aboutMe: 'ನನ್ನ ಬಗ್ಗೆ',
+    details: 'ವಿವರಗಳು',
+    editExperience: 'ಅನುಭವ ಸಂಪಾದಿಸಿ',
+    profileManageSubtitle: 'ನಿಮ್ಮ ವೃತ್ತಿಪರ ಗುರುತು ಮತ್ತು ಅಂಗಡಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಿ',
+    settingsEditLabel: 'ಸೆಟ್ಟಿಂಗ್‌ಗಳು',
+    updateProfile: 'ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಿ',
+    profileEditSubtitle: 'ಮಾರುಕಟ್ಟೆಗಾಗಿ ನಿಮ್ಮ ಗುರುತನ್ನು ಸುಧಾರಿಸಿ',
+    languageLabel: 'ಭಾಷೆ',
+    choosePreferredLanguage: 'ನಿಮ್ಮ ಆದ್ಯತೆಯ ಅಪ್ಲಿಕೇಶನ್ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+    changeLanguageBtn: 'ಭಾಷೆ ಬದಲಿಸಿ',
+    includeCountryCodeSettings: 'ಯಾವಾಗಲೂ ದೇಶ ಕೋಡ್ ಸೇರಿಸಿ (ಉದಾ. +91). ಸಂದೇಶಗಳನ್ನು ಇಲ್ಲಿ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.',
   },
 }

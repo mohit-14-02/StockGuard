@@ -75,6 +75,7 @@ export default function SignupPage() {
           .insert({
             name: form.shopName.trim(),
             whatsappNum: form.phoneNumber.trim(),
+            user_id: data.user.id,
           })
 
         if (shopError) {
@@ -144,7 +145,7 @@ export default function SignupPage() {
             <h1 className="text-5xl font-extrabold text-white leading-tight tracking-tight">
               Join StockGuard
             </h1>
-            <p className="text-xl text-emerald-100 mt-2 font-medium">{t.appNameHindi || t.appName}</p>
+            <p className="text-xl text-emerald-100 mt-2 font-medium">{t.appNameHindi || ''}</p>
           </div>
           
           <p className="text-lg text-white/90 leading-relaxed max-w-md">
@@ -181,7 +182,7 @@ export default function SignupPage() {
               <ShieldIcon className="w-7 h-7 text-white" />
             </div>
             <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">StockGuard</h1>
-            <p className="text-xs text-gray-400 mt-0.5">{t.appNameHindi || t.appName}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t.appNameHindi || ''}</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-200/60 p-8 shadow-sm">
@@ -299,7 +300,7 @@ export default function SignupPage() {
               <p className="text-gray-500 text-sm">
                 {t.alreadyHaveAccount}{' '}
                 <Link href="/login" className="text-orange-600 hover:text-orange-700 font-semibold transition-colors">
-                  Sign in
+                  {t.signIn}
                 </Link>
               </p>
             </div>

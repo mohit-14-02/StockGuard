@@ -1,3 +1,7 @@
+'use client'
+
+import { useLanguage } from '@/lib/LanguageContext'
+
 interface Distributor {
   id: string;
   name: string;
@@ -12,11 +16,13 @@ interface Props {
 }
 
 export default function DistributorScore({ distributors }: Props) {
+  const { t } = useLanguage()
+
   return (
     <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-100">
-        <h3 className="font-bold text-gray-900 text-sm">Distributors / वितरक</h3>
-        <p className="text-xs text-gray-400 mt-0.5">Return reliability score / वापसी विश्वसनीयता</p>
+        <h3 className="font-bold text-gray-900 text-sm">{t.distributorScoreTitle}</h3>
+        <p className="text-xs text-gray-400 mt-0.5">{t.returnReliability}</p>
       </div>
       <div className="divide-y divide-gray-50">
         {distributors.map((d) => {
@@ -24,18 +30,18 @@ export default function DistributorScore({ distributors }: Props) {
           let statusIcon = "✅";
           let statusBg = "bg-emerald-50";
           let statusText = "text-emerald-700";
-          let statusLabel = "Reliable";
+          let statusLabel = t.reliable;
 
           if (d.hasEscalation) {
             statusIcon = "❌";
             statusBg = "bg-red-50";
             statusText = "text-red-700";
-            statusLabel = "Issue";
+            statusLabel = t.issue;
           } else if (d.rejected > 0) {
             statusIcon = "⚠️";
             statusBg = "bg-amber-50";
             statusText = "text-amber-700";
-            statusLabel = "Caution";
+            statusLabel = t.caution;
           }
 
           return (
@@ -47,7 +53,7 @@ export default function DistributorScore({ distributors }: Props) {
                 <div>
                   <span className="text-gray-900 font-semibold text-sm block">{d.name}</span>
                   <span className="text-[11px] text-gray-400">
-                    {d.accepted}/{d.total} returns accepted
+                    {d.accepted}/{d.total} {t.returnsAccepted}
                   </span>
                 </div>
               </div>
@@ -71,7 +77,7 @@ export default function DistributorScore({ distributors }: Props) {
                 
                 {d.hasEscalation && (
                   <button className="text-[10px] font-bold text-red-600 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition-colors border border-red-200">
-                    Escalate
+                    {t.escalate}
                   </button>
                 )}
               </div>
@@ -81,8 +87,8 @@ export default function DistributorScore({ distributors }: Props) {
         {distributors.length === 0 && (
           <div className="p-8 text-center">
             <span className="text-2xl block mb-2">🤝</span>
-            <p className="text-gray-500 text-sm font-medium">No distributors yet</p>
-            <p className="text-gray-400 text-xs">अभी तक कोई वितरक नहीं</p>
+            <p className="text-gray-500 text-sm font-medium">{t.noDistributorsYet}</p>
+            <p className="text-gray-400 text-xs">{t.noDistributorsYetSub}</p>
           </div>
         )}
       </div>

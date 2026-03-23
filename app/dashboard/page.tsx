@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { createAuthenticatedSupabaseClient, getAuthenticatedUser } from '@/lib/supabase-auth'
 import { calcAtRisk, calcRecovered, calcLost } from '@/lib/lossCalculator'
 import LossCalculator from '@/components/dashboard/LossCalculator'
 import BatchTable from '@/components/dashboard/BatchTable'
@@ -11,66 +11,22 @@ import ExpiryChecker from '@/components/dashboard/ExpiryChecker'
 import SendSummaryButton from '@/components/dashboard/SendSummaryButton'
 import DashboardHeader from '@/components/dashboard/DashboardHeader'
 import SectionLabel from '@/components/dashboard/SectionLabel'
-import { getSession } from '@/lib/auth'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-
-const DEFAULT_SHOP_ID = process.env.NEXT_PUBLIC_SHOP_ID || ''
-
-async function resolveShopIdForDashboard() {
-  const session = await getSession()
-  if (session?.shopId) return session.shopId
-
-  const cookieStore = await cookies()
-  const supabaseServer = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll() { },
-      },
-    }
-  )
-
-  const { data: authData } = await supabaseServer.auth.getUser()
-  const user = authData.user
-  const email = user?.email?.toLowerCase().trim()
-  const meta = (user?.user_metadata || {}) as { shop_id?: string; shop_name?: string; shopName?: string }
-
-  if (meta.shop_id) return meta.shop_id
-
-  const metaShopName = meta.shop_name || meta.shopName
-  if (metaShopName) {
-    const { data: shopByName } = await supabaseServer
-      .from('Shop')
-      .select('id')
-      .eq('name', metaShopName)
-      .maybeSingle()
-    if (shopByName?.id) return shopByName.id
-  }
-
-  if (email) {
-    const { data: shopkeeper } = await supabaseServer
-      .from('Shopkeeper')
-      .select('shopId')
-      .eq('email', email)
-      .maybeSingle()
-    if (shopkeeper?.shopId) return shopkeeper.shopId
-  }
-
-  return DEFAULT_SHOP_ID
-}
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
-  const resolvedShopId = await resolveShopIdForDashboard()
+  // Get authenticated user — redirect to login if not logged in
+  const { userId, shopId: resolvedShopId } = await getAuthenticatedUser()
+  if (!userId) redirect('/login')
+
+  // Use the authenticated Supabase client (respects RLS — only shows this user's data)
+  const supabase = await createAuthenticatedSupabaseClient()
 
   const { data: products } = await supabase
     .from('Product')
     .select('id, name')
-    .eq('shopId', resolvedShopId)
+    .eq('shopId', resolvedShopId || '')
 
   const productIds = (products || []).map((p: any) => p.id)
 
@@ -85,12 +41,12 @@ export default async function DashboardPage() {
   const distributorsPromise = supabase
     .from('Distributor')
     .select('*, returnLogs:ReturnLog(*)')
-    .eq('shopId', resolvedShopId)
+    .eq('shopId', resolvedShopId || '')
 
   const salesPromise = supabase
     .from('Sales')
     .select('*')
-    .eq('shopId', resolvedShopId)
+    .eq('shopId', resolvedShopId || '')
 
   const [batchesRes, distributorsRes, salesRes] = await Promise.all([
     batchesPromise,
@@ -147,7 +103,7 @@ export default async function DashboardPage() {
     }
   })
 
-  const restockProducts: { name: string; stock: number; limit: number }[] = []
+  const restockProducts: { name: string; stock: number; limit: number; productId: string }[] = []
   const RESTOCK_LIMIT_THRESHOLD = 10
 
   productIds.forEach((pid: string) => {
@@ -160,6 +116,7 @@ export default async function DashboardPage() {
         name: productNameMap[pid] || pid,
         stock,
         limit: RESTOCK_LIMIT_THRESHOLD,
+        productId: pid,
       })
     }
   })
@@ -167,9 +124,23 @@ export default async function DashboardPage() {
   // Count expired batches
   expiredCount = batches.filter((b: any) => new Date(b.expiryDate).getTime() <= today.getTime()).length
 
+  // Calculate recovered: include sales of critical/expired items as recovered value
+  const salesRecoveredValue = sales
+    .filter((s: any) => {
+      // Find if the batch this sale was from was critical/expired
+      const batch = batches.find((b: any) => b.id === s.batchId)
+      if (!batch) return false
+      const daysToExpiry = Math.ceil((new Date(batch.expiryDate).getTime() - new Date(s.createdAt).getTime()) / 86400000)
+      return daysToExpiry <= 30 // Was critical (<=30 days) or already expired at time of sale
+    })
+    .reduce((sum: number, s: any) => {
+      const batch = batches.find((b: any) => b.id === s.batchId)
+      return sum + s.quantity * (batch?.purchasePrice || 0)
+    }, 0)
+
   const lossData = {
     atRisk: Math.round(calcAtRisk(batches)),
-    recovered: Math.round(calcRecovered(returnLogs)),
+    recovered: Math.round(calcRecovered(returnLogs) + salesRecoveredValue),
     lost: Math.round(calcLost(batches, acceptedIds)),
     atRiskCount: batches.filter((b: any) => {
       const d = (new Date(b.expiryDate).getTime() - today.getTime()) / 86400000
@@ -207,7 +178,7 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <section className="mb-6">
         <SectionLabel sectionKey="quickActions" />
-        <ActionButtons shopId={resolvedShopId} />
+        <ActionButtons shopId={resolvedShopId || ''} />
       </section>
 
       {/* WhatsApp Summary */}
@@ -234,12 +205,12 @@ export default async function DashboardPage() {
 
       {/* Invoice Upload */}
       <section className="mb-6">
-        <InvoiceUpload shopId={resolvedShopId} />
+        <InvoiceUpload shopId={resolvedShopId || ''} />
       </section>
 
       {/* Batch Table */}
       <section className="mb-6">
-        <BatchTable batches={batchesWithDays} shopId={resolvedShopId} />
+        <BatchTable batches={batchesWithDays} shopId={resolvedShopId || ''} />
       </section>
 
       {/* Distributors */}

@@ -1,9 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
 import { z } from "zod";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+
+async function getAuthenticatedClient() {
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll(); },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
+          } catch {}
+        },
+      },
+    },
+  );
+  const { data: { user } } = await supabase.auth.getUser();
+  return { supabase, userId: user?.id || null };
+}
 
 const RemoveProductSchema = z.object({
-  shopId: z.string().uuid(),
+  shopId: z.string(),
   productId: z.string().uuid().optional(),
   batchId: z.string().uuid().optional(),
   quantity: z.number().int().positive(),
@@ -13,6 +36,7 @@ const RemoveProductSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const body = RemoveProductSchema.parse(await req.json());
+    const { supabase, userId } = await getAuthenticatedClient();
 
     // Resolve productId if not provided
     let productId = body.productId;
@@ -31,7 +55,7 @@ export async function POST(req: NextRequest) {
     }
 
     let remainingToRemove = body.quantity;
-    const removedBatches: { id: string; removeAmt: number }[] = [];
+    const removedBatches: { id: string; removeAmt: number; purchasePrice: number | null; expiryDate: string }[] = [];
 
     if (body.batchId) {
       // ── Remove from specific batch ──
@@ -50,7 +74,7 @@ export async function POST(req: NextRequest) {
       }
 
       const removeAmt = Math.min(batch.quantity, remainingToRemove);
-      removedBatches.push({ id: batch.id, removeAmt });
+      removedBatches.push({ id: batch.id, removeAmt, purchasePrice: batch.purchasePrice, expiryDate: batch.expiryDate });
       remainingToRemove -= removeAmt;
 
     } else {
@@ -69,7 +93,7 @@ export async function POST(req: NextRequest) {
       for (const b of batches) {
         if (remainingToRemove <= 0) break;
         const removeAmt = Math.min(b.quantity, remainingToRemove);
-        removedBatches.push({ id: b.id, removeAmt });
+        removedBatches.push({ id: b.id, removeAmt, purchasePrice: b.purchasePrice, expiryDate: b.expiryDate });
         remainingToRemove -= removeAmt;
       }
     }
@@ -88,41 +112,62 @@ export async function POST(req: NextRequest) {
       
       if (current) {
         const newQty = Math.max(0, current.quantity - rb.removeAmt);
-        const { error: updateErr } = await supabase
+        await supabase
           .from("Batch")
           .update({ quantity: newQty })
           .eq("id", rb.id);
-        
-        if (updateErr) {
-          console.error("Failed to update batch quantity:", updateErr);
-        }
       }
     }
 
-    // ── Step 2: Record sale in Sales table ──
-    const salesRecords = removedBatches.map(rb => ({
-      shopId: body.shopId,
-      productId: productId,
-      batchId: rb.id,
-      productName: body.productName,
-      quantity: rb.removeAmt,
-    }));
+    // ── Step 2: Record sale in Sales table with recovered amount ──
+    const today = new Date();
+    const salesRecords = removedBatches.map(rb => {
+      // Calculate if this sale is recovering value from critical/expired batch 
+      const dt = new Date(rb.expiryDate);
+      const daysToExpiry = Math.ceil((dt.getTime() - today.getTime()) / 86400000);
+      const isCriticalSale = daysToExpiry <= 30; // Was critical or expired at time of sale
+      const recoveredAmount = isCriticalSale && rb.purchasePrice ? rb.removeAmt * rb.purchasePrice : 0;
 
-    const { error: salesErr } = await supabase.from("Sales").insert(salesRecords);
-    if (salesErr) {
-      // Sales table might not exist yet — log but don't fail the request
+      return {
+        shopId: body.shopId,
+        productId: productId,
+        batchId: rb.id,
+        productName: body.productName,
+        quantity: rb.removeAmt,
+        user_id: userId,
+        recoveredAmount: Math.round(recoveredAmount * 100) / 100,
+        temp_recovered: Math.round(recoveredAmount * 100) / 100 // internal use
+      };
+    });
+
+    const { error: salesErr } = await supabase.from("Sales").insert(salesRecords.map(r => {
+      const { temp_recovered, ...rest } = r;
+      return rest;
+    }));
+    
+    if (salesErr && salesErr.code === '42703') { // Column missing
+        await supabase.from("Sales").insert(salesRecords.map(r => ({
+            shopId: r.shopId,
+            productId: r.productId,
+            batchId: r.batchId,
+            productName: r.productName,
+            quantity: r.quantity
+        })));
+    } else if (salesErr) {
       console.warn("Sales insert warning:", salesErr.message);
     }
 
     const totalRemoved = body.quantity - remainingToRemove;
+    const totalRecovered = salesRecords.reduce((s, r) => s + (r.temp_recovered || 0), 0);
 
     return NextResponse.json({ 
       success: true,
       removed: totalRemoved,
       unfulfilled: remainingToRemove,
+      recoveredAmount: totalRecovered,
       message: remainingToRemove > 0
         ? `Only ${totalRemoved} units were available. ${remainingToRemove} units could not be fulfilled.`
-        : `Successfully removed ${totalRemoved} units.`,
+        : `Successfully removed ${totalRemoved} units.${totalRecovered > 0 ? ` ₹${totalRecovered} recovered from critical stock.` : ''}`,
     });
 
   } catch (err: any) {

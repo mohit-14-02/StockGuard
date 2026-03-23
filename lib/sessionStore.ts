@@ -5,7 +5,8 @@ export type SessionState =
   | { step: "idle" }
   | { step: "awaiting_return_confirm"; batchId: string; distributorId: string; productName: string; batchNumber: string | null; expiryDate: string; quantity: number; purchasePrice: number | null; distributorName: string; shopName: string }
   | { step: "awaiting_return_outcome"; batchId: string; distributorId: string }
-  | { step: "awaiting_broadcast_mrp"; batchId: string; productName: string; shopName: string };
+  | { step: "awaiting_broadcast_mrp"; batchId: string; productName: string; shopName: string }
+  | { step: "awaiting_restock_outcome"; productId: string; productName: string; shopName: string; distributorName: string };
 
 const store = new Map<string, SessionState>();
 

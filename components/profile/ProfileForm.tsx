@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { User, Mail, MapPin, Building, Phone, Fingerprint, AtSign, FileText, Loader2, Save, CheckCircle2, AlertCircle, Info, ChevronRight } from 'lucide-react'
 import { BUSINESS_CATEGORIES, type ProfileFormData } from '@/lib/types/profile'
 import type { Profile } from '@/lib/types/profile'
+import { useLanguage } from '@/lib/LanguageContext'
 
 interface ProfileFormProps {
   profile: Profile
@@ -16,6 +17,7 @@ interface ProfileFormProps {
 }
 
 export default function ProfileForm({ profile, userEmail, saving, error, success, onSave, onClearMessages }: ProfileFormProps) {
+  const { t, language } = useLanguage()
   const [form, setForm] = useState<ProfileFormData>({
     full_name: profile.full_name || '',
     username: profile.username || '',
@@ -60,8 +62,8 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
             <User className="w-5 h-5 text-orange-600" />
           </div>
           <div>
-            <h3 className="text-lg font-black text-slate-800 tracking-tight">Personal Identity</h3>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">व्यक्तिगत पहचान</p>
+            <h3 className="text-lg font-black text-slate-800 tracking-tight">{t.personalIdentity}</h3>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.personalIdentitySub}</p>
           </div>
         </div>
         
@@ -69,7 +71,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
           {/* Full Name */}
           <InputGroup
             id="full_name"
-            label="Full Name / पूरा नाम"
+            label={t.fullNameLabel}
             icon={<User className="w-4 h-4" />}
             required
           >
@@ -86,7 +88,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
           {/* Username */}
           <InputGroup
             id="username"
-            label="Username / यूज़रनेम"
+            label={t.usernameLabel}
             icon={<AtSign className="w-4 h-4" />}
             subtext="Unique ID for sharing profile"
           >
@@ -103,7 +105,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
           {/* Email (Read only) */}
           <InputGroup
             id="email"
-            label="Verified Email / ईमेल"
+            label={t.verifiedEmailLabel}
             icon={<Mail className="w-4 h-4" />}
             locked
           >
@@ -123,7 +125,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
           {/* Phone */}
           <InputGroup
             id="phone_number"
-            label="WhatsApp Number / व्हाट्सएप नंबर"
+            label={t.whatsappNumberProfileLabel}
             icon={<Phone className="w-4 h-4" />}
           >
             <input
@@ -140,7 +142,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
             <div className="flex items-center justify-between text-[11px] font-black text-slate-400 uppercase tracking-[0.1em] px-1 mb-2">
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-orange-500" />
-                <span>Professional Bio / अपना परिचय</span>
+                <span>{t.professionalBio}</span>
               </div>
               <span>{form.bio.length}/300</span>
             </div>
@@ -163,8 +165,8 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
             <Building className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <h3 className="text-lg font-black text-slate-800 tracking-tight">Business Configuration</h3>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">व्यापार विन्यास</p>
+            <h3 className="text-lg font-black text-slate-800 tracking-tight">{t.businessConfiguration}</h3>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t.businessConfigSub}</p>
           </div>
         </div>
         
@@ -172,7 +174,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
            {/* Shop Name */}
            <InputGroup
             id="shop_name"
-            label="Shop Name / दुकान का नाम"
+            label={t.shopNameProfileLabel}
             icon={<Building className="w-4 h-4" />}
           >
             <input
@@ -187,7 +189,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
           {/* Category */}
           <InputGroup
             id="business_category"
-            label="Trade Category / श्रेणी"
+            label={t.tradeCategoryLabel}
             icon={<ChevronRight className="w-4 h-4 rotate-90" />}
           >
             <select
@@ -195,10 +197,10 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
               onChange={(e) => handleChange('business_category', e.target.value)}
               className="peer w-full px-6 py-4 bg-slate-50 border border-transparent rounded-[24px] focus:bg-white focus:border-orange-200 focus:ring-4 focus:ring-orange-500/5 outline-none transition-all text-slate-900 font-bold appearance-none cursor-pointer"
             >
-              <option value="">Select Category / श्रेणी चुनें</option>
+              <option value="">{t.selectCategory}</option>
               {BUSINESS_CATEGORIES.map(cat => (
                 <option key={cat.value} value={cat.value}>
-                  {cat.label}
+                  {language === 'hi' ? cat.labelHi : cat.label}
                 </option>
               ))}
             </select>
@@ -224,7 +226,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
           <div className="md:col-span-2 space-y-2">
             <div className="flex items-center text-[11px] font-black text-slate-400 uppercase tracking-[0.1em] px-1 mb-2 gap-2">
               <MapPin className="w-4 h-4 text-rose-500" />
-              <span>Operating Address / दुकान का पता</span>
+              <span>{t.operatingAddress}</span>
             </div>
             <textarea
               value={form.shop_address}
@@ -258,7 +260,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
       <div className="pt-10 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-slate-100">
         <div className="flex items-center gap-3 text-slate-400 font-bold text-xs uppercase tracking-widest px-4">
           <Info className="w-4 h-4 text-orange-400" />
-          Mandatory fields are marked with *
+          {t.mandatoryFields}
         </div>
         
         <button
@@ -273,7 +275,7 @@ export default function ProfileForm({ profile, userEmail, saving, error, success
             <Save className="w-5 h-5 relative z-10" />
           )}
           <span className="relative z-10">
-            {saving ? 'UPDATING SYSTEM...' : 'SAVE CONFIGURATION / सुरक्षित करें'}
+            {saving ? t.updatingSystem : t.saveConfiguration}
           </span>
         </button>
       </div>

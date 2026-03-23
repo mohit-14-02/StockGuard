@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { FileText, Upload, Check, Loader2 } from 'lucide-react'
+import { useLanguage } from '@/lib/LanguageContext'
 
 interface OcrItem {
   productName: string
@@ -13,6 +14,7 @@ interface OcrItem {
 interface Props { shopId: string }
 
 export default function InvoiceUpload({ shopId }: Props) {
+  const { t } = useLanguage()
   const [items, setItems] = useState<OcrItem[]>([])
   const [selected, setSelected] = useState<boolean[]>([])
   const [loading, setLoading] = useState(false)
@@ -63,8 +65,8 @@ export default function InvoiceUpload({ shopId }: Props) {
             <Upload className="w-5 h-5" />
           </div>
           <div className="text-left">
-            <span className="block text-sm">Upload Invoice / इनवॉइस अपलोड करें</span>
-            <span className="block text-[10px] text-white/70">Take photo of bill to auto-add stock</span>
+            <span className="block text-sm">{t.uploadInvoiceBtn}</span>
+            <span className="block text-[10px] text-white/70">{t.uploadInvoiceSubtext}</span>
           </div>
           <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFile} />
         </label>
@@ -73,8 +75,8 @@ export default function InvoiceUpload({ shopId }: Props) {
       {loading && (
         <div className="text-center bg-white border border-gray-200/60 py-6 rounded-2xl w-full">
           <Loader2 className="w-6 h-6 text-orange-500 animate-spin mx-auto mb-2" />
-          <p className="font-semibold text-gray-700 text-sm">Reading invoice...</p>
-          <p className="text-xs text-gray-400">इनवॉइस पढ़ रहे हैं...</p>
+          <p className="font-semibold text-gray-700 text-sm">{t.readingInvoice}</p>
+          <p className="text-xs text-gray-400">{t.readingInvoiceSub}</p>
         </div>
       )}
 
@@ -82,9 +84,9 @@ export default function InvoiceUpload({ shopId }: Props) {
         <div className="bg-white border border-gray-200/60 rounded-2xl p-4 w-full shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <FileText className="w-4 h-4 text-indigo-600" />
-            <p className="font-bold text-sm text-gray-900">Found {items.length} items / {items.length} आइटम मिले</p>
+            <p className="font-bold text-sm text-gray-900">{t.foundItems.replace('{count}', String(items.length))}</p>
           </div>
-          <p className="text-xs text-gray-400 mb-3">Deselect any to skip / हटाने के लिए अनचेक करें</p>
+          <p className="text-xs text-gray-400 mb-3">{t.deselectToSkip}</p>
           {items.map((item, i) => (
             <label key={i} className="flex items-start gap-3 mb-2 text-sm bg-gray-50 p-3 rounded-xl border border-gray-100 cursor-pointer hover:bg-orange-50/30 transition-colors">
               <input type="checkbox" checked={selected[i]}
@@ -102,7 +104,7 @@ export default function InvoiceUpload({ shopId }: Props) {
           ))}
           <button onClick={saveAll} className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-2.5 rounded-xl text-sm font-bold mt-3 shadow-md shadow-emerald-200/50 flex items-center justify-center gap-2">
             <Check className="w-4 h-4" />
-            Save All Selected / सब सेव करें
+            {t.saveAllSelected}
           </button>
         </div>
       )}
@@ -110,7 +112,7 @@ export default function InvoiceUpload({ shopId }: Props) {
       {saved && (
         <div className="text-emerald-700 bg-emerald-50 border border-emerald-200/60 rounded-2xl text-center font-bold py-4 flex items-center justify-center gap-2">
           <Check className="w-5 h-5" />
-          Saved! Refreshing... / सेव हो गया!
+          {t.savedRefreshing}
         </div>
       )}
     </div>

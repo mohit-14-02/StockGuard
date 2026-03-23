@@ -67,7 +67,7 @@ export default function ProfilePage() {
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
             {t.profile}
           </h1>
-          <p className="text-slate-500 font-medium">Manage your professional identity and shop configurations</p>
+          <p className="text-slate-500 font-medium">{t.profileManageSubtitle}</p>
         </div>
         
         <Link
@@ -76,7 +76,7 @@ export default function ProfilePage() {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <Pencil className="w-4 h-4" />
-          Edit Experience
+          {t.editExperience}
         </Link>
       </div>
 
@@ -156,7 +156,7 @@ export default function ProfilePage() {
               {/* Left Column: About/Bio */}
               <div className="lg:col-span-1 space-y-8">
                 <div>
-                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-4">About Me / परिचय</h4>
+                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-4">{t.aboutMe}</h4>
                   <div className="bg-slate-50 p-6 rounded-[24px] border border-slate-100 relative group/bio overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5">
                       <FileText className="w-12 h-12 text-slate-900" />
@@ -179,7 +179,7 @@ export default function ProfilePage() {
 
               {/* Right Column: Grid of Info */}
               <div className="lg:col-span-2">
-                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Details / विवरण</h4>
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-6">{t.details}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <MetricCard
                     icon={<Mail className="w-5 h-5" />}

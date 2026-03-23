@@ -86,8 +86,8 @@ export default function SettingsPage() {
               <Globe className="w-5 h-5 text-orange-600" />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-gray-900">Language / भाषा</h2>
-              <p className="text-sm text-gray-500">Choose your preferred app language</p>
+              <h2 className="text-lg font-semibold text-gray-900">{t.languageLabel}</h2>
+              <p className="text-sm text-gray-500">{t.choosePreferredLanguage}</p>
             </div>
           </div>
           <div className="p-6">
@@ -105,7 +105,7 @@ export default function SettingsPage() {
                 onClick={() => setShowLanguageModal(true)}
                 className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md shadow-orange-200/50"
               >
-                Change Language
+                {t.changeLanguageBtn}
               </button>
             </div>
 
@@ -158,7 +158,7 @@ export default function SettingsPage() {
                   {updatingPhone ? <Loader2 className="w-4 h-4 animate-spin" /> : t.updateNumber}
                 </button>
               </div>
-              <p className="text-[10px] text-gray-400 mt-2">Always include country code (e.g. +91). Messages will be sent here.</p>
+              <p className="text-[10px] text-gray-400 mt-2">{t.includeCountryCodeSettings}</p>
             </div>
           </div>
         </div>

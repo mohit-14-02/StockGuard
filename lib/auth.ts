@@ -96,3 +96,71 @@ export async function verifyCredentials(email: string, password: string) {
 
   return shopkeeper
 }
+
+/** Resolve shop ID from the authenticated user (checks session, Supabase Auth metadata, Shopkeeper table) */
+export async function resolveShopIdFromAuth(): Promise<string | null> {
+  const { shopId } = await resolveAuthContext()
+  return shopId
+}
+
+/** Resolve both userId and shopId from the authenticated user */
+export async function resolveAuthContext(): Promise<{ userId: string | null; shopId: string | null }> {
+  // First try legacy session cookie
+  const session = await getSession()
+  
+  const cookieStore = await cookies()
+
+  // Import dynamically to avoid circular deps
+  const { createServerClient } = await import('@supabase/ssr')
+  
+  const supabaseServer = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll() },
+        setAll() {},
+      },
+    },
+  )
+
+  const { data: authData } = await supabaseServer.auth.getUser()
+  const user = authData.user
+  if (!user) {
+    // Fall back to legacy session
+    if (session?.shopId) return { userId: null, shopId: session.shopId }
+    return { userId: null, shopId: null }
+  }
+
+  const userId = user.id
+  const email = user.email?.toLowerCase().trim()
+  const meta = (user.user_metadata || {}) as {
+    shop_id?: string
+    shop_name?: string
+    shopName?: string
+  }
+
+  if (session?.shopId) return { userId, shopId: session.shopId }
+  if (meta.shop_id) return { userId, shopId: meta.shop_id }
+
+  const metaShopName = meta.shop_name || meta.shopName
+  if (metaShopName && typeof metaShopName === 'string') {
+    const { data: shopByName } = await supabaseServer
+      .from('Shop')
+      .select('id')
+      .eq('name', metaShopName.trim())
+      .maybeSingle()
+    if (shopByName?.id) return { userId, shopId: shopByName.id }
+  }
+
+  if (email) {
+    const { data: shopkeeper } = await supabaseServer
+      .from('Shopkeeper')
+      .select('shopId')
+      .eq('email', email)
+      .maybeSingle()
+    if (shopkeeper?.shopId) return { userId, shopId: shopkeeper.shopId }
+  }
+
+  return { userId, shopId: null }
+}
